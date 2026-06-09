@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCSHosting</title>
+<style>
+body {
+  margin: 0; /* 기본 여백 제거 */
+  padding-top: 100px; /* 헤더 높이만큼 본문을 아래로 밀어줌 (겹침 방지) */
+}
+
+.navbar {
+  position: fixed;  /* 화면의 특정 위치에 고정 */
+  top: 0;           /* 최상단에 붙임 */
+  left: 0;          /* 좌측 끝에 붙임 */
+  width: 100%;      /* 너비를 전체로 설정 */
+  height: 50px;     /* 헤더의 높이 */
+  background-color: #272727; /* 검은색 배경 */
+  color: rgb(0, 196, 75);     /* 글자색은 흰색으로 */
+  display: flex;
+  align-items: center;
+  z-index: 10;    /* 다른 요소보다 항상 위에 보이도록 설정 */
+  justify-content: space-between; /* 좌우 끝으로 배정 */
+  padding: 0 30px;               /* 양옆 여백 */
+  box-sizing: border-box;        /* 패딩 포함 너비 계산 */
+} 
+
+.logo-img {
+  height: 35px;
+  width: auto;
+  vertical-align: middle;
+}
+
+.logo-img.logo-img-special {
+  height: 33px;
+}
+
+.left-group {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* 이미지 사이의 간격 */
+}
+
+/* 3. 추가할 링크 공통 스타일 (밑줄 제거) */
+.logo-link, .nav-link {
+  text-decoration: none;
+  color: rgb(184, 190, 183);
+}
+
+.nav-link {
+  font-size: 40px;
+}
+
+body {
+  margin: 0;
+  /* 헤더 높이가 50px이므로, 딱 맞게 50px만 띄워줍니다 */
+  padding-top: 50px; 
+}
+
+/* 꽉 찬 이미지 스타일 */
+.full-width-image {
+  width: 100%;
+  height: 400px; 
+  background-image: url('image/superflatBG2.webp'); 
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  /* 중요: 위쪽으로 정렬하여 배경 '바로 밑'에 붙게 함 */
+  align-items: flex-start; 
+}
+
+/* 2. 상단 바 역할을 할 콘텐츠 박스 */
+.overlay-content {
+  width: 100%;
+  padding: 20px 0;
+  display: flex;
+  
+  /* 1. 중앙 정렬 */
+  justify-content: center; 
+  
+  /* 2. 모든 요소 사이의 간격을 동일하게 설정 (효율성 핵심) */
+  gap: 100px; 
+  
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* 이제 .left-group-items 관련 설정은 삭제하셔도 됩니다. */
+
+/* 왼쪽 메뉴들(Home, Forum) 간격 */
+.left-group-items {
+  display: flex;
+  gap: 30px; /* 글자 사이의 간격 */
+}
+
+/* 3. 글자 크기 유지 (vw 단위를 섞어 쓰면 화면 비례에 대응) */
+.overlay-link {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  /* 20px을 유지하되, 필요시 반응형으로 조절 */
+  font-size: 20px; 
+  font-weight: 500;
+  white-space: nowrap; /* 글자가 줄바꿈되지 않게 고정 */
+}
+
+/* 4. 검색창 비율 유지 */
+/* 1. 검색 전체를 감싸는 네모난 박스 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: white; /* 전체 배경색 */
+  border: 1px solid #ccc;  /* 테두리 */
+  border-radius: 4px;      /* 아주 살짝만 굴린 네모 형태 */
+  overflow: hidden;        /* 내부 요소가 밖으로 나가지 않게 */
+  height: 35px;            /* 높이 고정 */
+}
+
+/* 2. 입력창 스타일 */
+.search-bar input {
+  border: none;            /* 자체 테두리 제거 */
+  outline: none;           /* 클릭 시 생기는 파란 테두리 제거 */
+  padding: 0 15px;
+  width: 150px;
+  height: 100%;
+  font-size: 14px;
+}
+
+/* 3. 검색창과 버튼 사이의 가로막는 줄 (구분선) */
+.search-divider {
+  width: 1px;              /* 선 두께 */
+  height: 20px;            /* 선 높이 (박스보다 조금 낮게 설정) */
+  background-color: #ddd;  /* 선 색상 */
+}
+
+/* 4. 검색 버튼 스타일 */
+.search-bar button {
+  border: none;            /* 자체 테두리 제거 */
+  background-color: white; /* 입력창과 같은 배경색으로 통합 */
+  width: 40px;
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25 px;         /* 돋보기 크기 */
+  transition: background 0.2s;
+}
+
+/* 마우스 올렸을 때 버튼만 살짝 색 변하게 (선택 사항) */
+.search-bar button:hover {
+  background-color: #f5f5f5;
+}
+
+/* 청록색 섹션 스타일 수정 */
+.cyan-section {
+  width: 100%;
+  height: 350px;
+  background-color: #151e36;
+  margin-top: 200px;
+  display: flex;
+  
+  /* [수정] 중앙 정렬 대신 왼쪽 정렬로 변경 */
+  justify-content: flex-start; 
+  align-items: center;
+  
+  /* [추가] 왼쪽 벽에서 일정 거리(예: 10%)를 띄워 가독성 확보 */
+  padding-left: 25%; 
+  box-sizing: border-box;
+  color: white;
+}
+
+/* 텍스트와 버튼을 감싸는 컨테이너 */
+.section-content {
+  display: flex;
+  flex-direction: column; 
+  
+  /* [수정] 자식 요소(버튼 등)들도 왼쪽 정렬 */
+  align-items: flex-start; 
+  
+  /* [수정] 텍스트 왼쪽 정렬 */
+  text-align: left; 
+  gap: 15px;  
+}
+
+/* 큰 제목 */
+.section-title {
+  font-size: 40px;
+  margin: 0;
+}
+
+/* 내용 설명 */
+.section-text { 
+  font-size: 18px;
+  line-height: 1.6; /* 줄 간격 */
+  color: #ffffff; /* 본문은 약간 흐린 색으로 가독성 높임 */
+  margin: 0;
+}
+
+/* 버튼 스타일 */
+.section-button {
+  display: inline-block;
+  padding: 11px 20px;
+  background-color: rgb(52, 109, 255); /* 헤더 로고 색상과 통일 */
+  color: white;
+  border-radius: 3px;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.RF-section {
+  width: 100%;
+  height: 350px;
+  background-color: #ffffff;
+  display: flex;
+  
+  /* [수정] 중앙 정렬 대신 왼쪽 정렬로 변경 */
+  justify-content: flex-start; 
+  align-items: center;
+  
+  /* [추가] 왼쪽 벽에서 일정 거리(예: 10%)를 띄워 가독성 확보 */
+  padding-left: 25%; 
+  box-sizing: border-box;
+  color: white;
+}
+
+/* 텍스트와 버튼을 감싸는 컨테이너 */
+.RFsection-content {
+  display: flex;
+  flex-direction: column; 
+  
+  /* [수정] 자식 요소(버튼 등)들도 왼쪽 정렬 */
+  align-items: flex-start; 
+  
+  /* [수정] 텍스트 왼쪽 정렬 */
+  text-align: left; 
+  gap: 15px;  
+}
+
+/* 큰 제목 */
+.RFsection-title {
+  font-size: 40px;
+  margin: 0;
+  color: black;
+}
+
+/* 내용 설명 */
+.RFsection-text { 
+  font-size: 18px;
+  line-height: 1.6; /* 줄 간격 */
+  color: #000000; /* 본문은 약간 흐린 색으로 가독성 높임 */
+  margin: 0;
+}
+
+/* 버튼 스타일 */
+.RFsection-button {
+  display: inline-block;
+  padding: 11px 20px;
+  background-color: rgb(52, 109, 255); /* 헤더 로고 색상과 통일 */
+  color: white;
+  border-radius: 3px;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+/* 푸터(Footer) 스타일 */
+.footer {
+    width: 100%;
+    background-color: #1a1a1a; /* 검은색 배경 */
+    color: #888888;           /* 글자색은 연한 회색 */
+    padding: 40px 0;          /* 위아래 여백 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* 가로 중앙 정렬 */
+    gap: 10px;                /* 줄 사이 간격 */
+    border-top: 1px solid #333; /* 상단에 미세한 줄 추가 */
+    font-family: sans-serif;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.footer .copyright {
+    font-weight: bold;
+    color: #bbbbbb;
+}
+
+.footer .email {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* 1. 팝업 전체 배경 (배경을 어둡게 하고 초기엔 숨김) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    
+    /* 초기 상태: 숨김 */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+
+/* 2. News 링크를 눌러 URL에 #newsModal이 붙었을 때 활성화 */
+.modal-overlay:target {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 3. 팝업 창 박스 */
+.modal-window {
+    position: relative;
+    background-color: white;
+    width: 50%;
+    max-width: 600px;
+    margin: 100px auto; /* 상단 여백 */
+    padding: 40px;
+    border-radius: 10px;
+    color: #333;
+    
+    /* 핵심: 높이를 고정하지 않아 내용에 따라 늘어남 */
+    min-height: 100px; 
+    max-height: 70vh; /* 너무 길어지면 화면의 70%까지만 커지고 내부 스크롤 발생 */
+    overflow-y: auto;
+    
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* 4. 닫기 버튼 (X) */
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+    text-decoration: none;
+    color: #999;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+/* 5. 팝업 내부 텍스트 스타일 */
+.modal-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #151e36;
+}
+
+.newsmodal-text {
+    font-size: 17px;
+    line-height: 1.8;
+    white-space: pre-wrap; /* 줄바꿈(엔터)이 그대로 반영됨 */
+}
+
+.informationmodal-text {
+    font-size: 16px;
+    line-height: 1.0;
+    white-space: pre-wrap; /* 줄바꿈(엔터)이 그대로 반영됨 */
+}
+
+</style>
+</head>
+
+<body>
+<header class="navbar">
+  <div class="left-group">
+    <a class="logo-link">
+      <img src="image/Creeper_Logo.png" alt="Logo1" class="logo-img">
+    </a>
+    
+    <a href="https://help.minecraft.net/hc/en-us/articles/360058525452" class="logo-link">
+      <img src="image/Minecraft_Logo.png" alt="Logo2" class="logo-img">
+    </a>
+  </div>
+
+    <a href="#InformationModal" class="overlay-link">
+      <img src="image/Information.png" alt="Logo3" class="logo-img logo-img-special">
+     </a>
+</header>
+
+<div class="full-width-image">
+  <div class="overlay-content">
+    <a href="Home.html" class="overlay-link">Home</a>
+    <a href="https://www.minecraftforum.net/" class="overlay-link">Forum</a>
+    <a href="#newsModal" class="overlay-link">News</a>
+    
+    <!-- <div class="search-bar">
+      <input type="text" placeholder="Search...">
+      <div class="search-divider"></div>
+      <button type="submit">⌕</button>
+    </div> -->
+  </div>
+</div>
+
+<div class="cyan-section">
+  <div class="section-content">
+    <p class="section-title">Start Your Project</p>
+    <p class="section-text">
+      Most fastest and optimal way to easily Hosting Your Server <br>
+      About the Server Hosting in minecraft and "How to Do" Tutorials<br>
+      Hosting own your Minecraft Server Now with MCSHosting!
+    </p>
+    <a href="Hosting.html" class="section-button">Hosting</a>    
+  </div>
+</div>
+
+<div class="RF-section">
+  <div class="RFsection-content">
+    <p class="RFsection-title">Report and Feedback</p>
+    <p class="RFsection-text">
+      Give me the feedback of the site or my Information <br>
+      What about the kind of Hosting requests?<br>
+      Lets grow up together!
+    </p>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=yuangracepeter@gmail.com&su=MCSHosting - FeedBack or Report &body=Your name:%0A%0AFeedBacks:%0A%0AReports:" class="RFsection-button">Go feedback</a>    
+  </div>
+</div>
+
+<footer class="footer">
+    <p class="copyright">Copyright &copy; 2026 MCSHosting. All rights reserved.</p>
+    <p>Contact me: <a class="email">yuangracepeter@gmail.com</a></p>
+</footer>
+
+<div id="newsModal" class="modal-overlay">
+    <div class="modal-window">
+        <a href="#" class="modal-close">&times;</a>
+        
+        <h1 class="modal-title">Update News</h1>
+        <hr style="border: 0; height: 1px; background: #eee; margin-bottom: 20px;">
+        
+        <div class="newsmodal-text">
+          We released! What now?
+        </div>
+    </div>
+</div>
+
+<div id="InformationModal" class="modal-overlay">
+  <div class="modal-window">
+      <a href="#" class="modal-close">&times;</a>
+      
+      <h1 class="modal-title">Information</h1>
+      <hr style="border: 0; height: 1px; background: #eee; margin-bottom: 20px;">
+      
+      <div class="informationmodal-text">
+        This web is learning for the Minecrft Server Hosting easily <br>
+        This is not an official from the Minecraft or Mojang Team
+
+      </div>
+  </div>
+</div>
+
+</body>
+</html>
